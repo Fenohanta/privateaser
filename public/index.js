@@ -151,7 +151,7 @@ const actors = [{
   }]
 }];
 
-
+//get the index of the coresponding barId
 events[0].price=2;
 function getIndexBar(bars,event ){
   var result =-1;
@@ -163,13 +163,29 @@ function getIndexBar(bars,event ){
   
 }
 
+//takes the reduction coefficient in function of the number of people
+function decreasePricePerPerson(event){
+  var result=1;
+  if(event.persons>60){
+    result=0.5;
+  }else if(event.persons>20){
+    result=0.7;
+  }else if(event.persons>10){
+    result=0.9;
+  }
+  return result;
+}
+
+//all price calculs are here
 function updatePrice(){
   
 	for (var i=0;i<events.length;i++){
     var indexBar = getIndexBar(bars,events[i]);
-    events[i].price=events[i].time*bars[indexBar].pricePerHour+events[i].persons*bars[indexBar].pricePerPerson;
+    var decreasePersonPriceCoeff=decreasePricePerPerson(events[i]);
+    events[i].price=events[i].time*bars[indexBar].pricePerHour+events[i].persons*bars[indexBar].pricePerPerson*decreasePersonPriceCoeff;
 		}
 }
+
 
 updatePrice();
 console.log(bars);
