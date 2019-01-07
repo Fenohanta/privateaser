@@ -1,6 +1,6 @@
 'use strict';
 
-//list of bats
+//list of bars
 //useful for ALL 5 steps
 //could be an array of objects that you fetched from api or database
 const bars = [{
@@ -26,7 +26,11 @@ const bars = [{
 //The `price` is updated from step 1 and 2
 //The `commission` is updated from step 3
 //The `options` is useful from step 4
-const events = [{
+
+
+
+//--------------------------
+var events = [{
   'id': 'bba9500c-fd9e-453f-abf1-4cd8f52af377',
   'booker': 'esilv-bde',
   'barId': 'f944a3ff-591b-4d5b-9b67-c7e08cba9791',
@@ -36,7 +40,7 @@ const events = [{
     'deductibleReduction': false
   },
   'price': 0,
-  'commission': {
+   'commission': {
     'insurance': 0,
     'treasury': 0,
     'privateaser': 0
@@ -50,7 +54,7 @@ const events = [{
   'options': {
     'deductibleReduction': true
   },
-  'price': 0,
+  'price':1 ,
   'commission': {
     'insurance': 0,
     'treasury': 0,
@@ -61,11 +65,12 @@ const events = [{
   'booker': 'otacos',
   'barId': '6e06c9c0-4ab0-4d66-8325-c5fa60187cf8',
   'distance': 5,
+  'time': 6,
   'persons': 80,
   'options': {
     'deductibleReduction': true
   },
-  'price': 0,
+  'price':1 ,
   'commission': {
     'insurance': 0,
     'treasury': 0,
@@ -146,6 +151,27 @@ const actors = [{
   }]
 }];
 
+
+events[0].price=2;
+function getIndexBar(bars,event ){
+  var result =-1;
+  for(var i=0;i<bars.length;i++){
+    if(event.barId===bars[i].id) {
+      return i;
+    } 
+  }
+  
+}
+
+function updatePrice(){
+  
+	for (var i=0;i<events.length;i++){
+    var indexBar = getIndexBar(bars,events[i]);
+    events[i].price=events[i].time*bars[indexBar].pricePerHour+events[i].persons*bars[indexBar].pricePerPerson;
+		}
+}
+
+updatePrice();
 console.log(bars);
 console.log(events);
 console.log(actors);
