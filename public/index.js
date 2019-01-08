@@ -196,8 +196,22 @@ function updateCommision(){
   }
 }
 
+//if the booker subscribes to the deductible option
+function deductiblePrice(){
+  for(var i=0;i<events.length;i++)
+  {
+    
+    if(events[i].options.deductibleReduction){
+      events[i].price +=events[i].persons;
+    }
+  }
+}
+
+
 updatePrice();
+deductiblePrice();
 updateCommision();
+
 console.log(bars);
 console.log(events);
 console.log(actors);
