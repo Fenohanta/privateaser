@@ -65,7 +65,7 @@ var events = [{
   'booker': 'otacos',
   'barId': '6e06c9c0-4ab0-4d66-8325-c5fa60187cf8',
   'distance': 5,
-  'time': 6,
+  'time': 5,
   'persons': 80,
   'options': {
     'deductibleReduction': true
@@ -151,16 +151,26 @@ const actors = [{
   }]
 }];
 
-//get the index of the coresponding barId
-events[0].price=2;
-function getIndexBar(bars,event ){
+//get the index of the corresponding barId
+function GetIndexBar(bars,event ){
   var result =-1;
   for(var i=0;i<bars.length;i++){
     if(event.barId===bars[i].id) {
       return i;
     } 
+  } 
+}
+
+
+
+//get the index of the corresponding event for the payment
+function GetIndexEvent(actor,events){
+  var result=-1; 
+  for(var i=0;i<events.length;i++){
+    if(actor.eventId===events[i].id) {
+      return i;
+    }
   }
-  
 }
 
 //takes the reduction coefficient in function of the number of people
@@ -180,11 +190,12 @@ function decreasePricePerPerson(event){
 function updatePrice(){
   
 	for (var i=0;i<events.length;i++){
-    var indexBar = getIndexBar(bars,events[i]);
+    var indexBar = GetIndexBar(bars,events[i]);
     var decreasePersonPriceCoeff=decreasePricePerPerson(events[i]);
     events[i].price=events[i].time*bars[indexBar].pricePerHour+events[i].persons*bars[indexBar].pricePerPerson*decreasePersonPriceCoeff;
 		}
 }
+
 
 //all commissions updates are here (step 3)
 function updateCommision(){
@@ -207,10 +218,22 @@ function deductiblePrice(){
   }
 }
 
+//actors debit/credit
+function payment(){
+  for(var i=0;i<actors.length;i++){
+    var indexEvent=GetIndexEvent(actors[i],events);
+    actors[i].payment[0]=events[indexEvent].price;
+    actors[i].payment[1]=Math.round(events[indexEvent].price*0.7);
+    actors[i].payment[2]=events[indexEvent].commission.insurance;
+    actors[i].payment[3]=events[indexEvent].commission.treasury;
+    actors[i].payment[4]=events[indexEvent].commission.privateaser;
+  }
+}
 
 updatePrice();
 deductiblePrice();
 updateCommision();
+payment();
 
 console.log(bars);
 console.log(events);
