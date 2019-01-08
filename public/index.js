@@ -176,7 +176,7 @@ function decreasePricePerPerson(event){
   return result;
 }
 
-//all price calculs are here
+//all price calculs are here (step 1 & 2)
 function updatePrice(){
   
 	for (var i=0;i<events.length;i++){
@@ -186,8 +186,18 @@ function updatePrice(){
 		}
 }
 
+//all commissions updates are here (step 3)
+function updateCommision(){
+  for(var i=0;i<events.length;i++){
+    var commission=0.3*events[i].price;
+    events[i].commission.insurance=commission/2;
+    events[i].commission.treasury=events[i].persons;
+    events[i].commission.privateaser=commission-events[i].commission.insurance-events[i].commission.treasury;
+  }
+}
 
 updatePrice();
+updateCommision();
 console.log(bars);
 console.log(events);
 console.log(actors);
